@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html class="fontawesome-i2svg-active fontawesome-i2svg-complete" lang="zh-Hans"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="IE=edge, chrome=1" http-equiv="X-UA-Compatible">
+
+    <title>用S-函数从Simulink方案导出C++代码 - 我爱学习网</title>
+
+    <link rel="stylesheet" href="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/content.css">
+    <script src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f_003.txt"></script><script src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f_002.txt"></script><script src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f_005.txt" id="google_shimpl"></script><script type="text/javascript" async="" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/auto_dup"></script><script type="text/javascript" async="" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/ucnm"></script><script src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/hm.js"></script><script src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/jquery.1.9.1.js"></script>
+    <script type="text/javascript" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/cm.js" async="async" defer="defer"></script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?9f604f900f5e9600424a4d1f9c67ea0c";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<meta http-equiv="origin-trial" content="AzoawhTRDevLR66Y6MROu167EDncFPBvcKOaQispTo9ouEt5LvcBjnRFqiAByRT+2cDHG1Yj4dXwpLeIhc98/gIAAACFeyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjYxMjk5MTk5LCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><meta http-equiv="origin-trial" content="A6+nc62kbJgC46ypOwRsNW6RkDn2x7tgRh0wp7jb3DtFF7oEhu1hhm4rdZHZ6zXvnKZLlYcBlQUImC4d3kKihAcAAACLeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjYxMjk5MTk5LCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><meta http-equiv="origin-trial" content="A/9La288e7MDEU2ifusFnMg1C2Ij6uoa/Z/ylwJIXSsWfK37oESIPbxbt4IU86OGqDEPnNVruUiMjfKo65H/CQwAAACLeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXRhZ3NlcnZpY2VzLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjYxMjk5MTk5LCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><link rel="preload" href="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f.txt" as="script"><script type="text/javascript" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f.txt"></script><link rel="preload" href="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f_004.txt" as="script"><script type="text/javascript" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f_004.txt"></script><link rel="preload" href="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f.txt" as="script"><script type="text/javascript" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f.txt"></script><link rel="preload" href="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f_004.txt" as="script"><script type="text/javascript" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f_004.txt"></script></head>
+<body style="padding: 0px 0px 154px;">
+
+
+<nav id="question-header" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand text-hide question-header-logo" href="https://www.5axxw.com/">我爱学习网-问答</a>
+
+        <div class="navbar-collapse collapse" id="navbarNavDropdown" style="">
+            <ul class="navbar-nav font-weight-bold">
+                <li class="nav-item">
+                    <a href="https://www.5axxw.com/" class="nav-link ">首页</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.5axxw.com/itnews/" class="nav-link">IT资讯</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.5axxw.com/wenku/" class="nav-link ">文&nbsp;库</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.5axxw.com/tools/" class="nav-link ">工&nbsp;具</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.5axxw.com/wiki/" class="nav-link ">Wiki</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://www.5axxw.com/questions/index" class="nav-link active">问&nbsp;答</a>
+                </li>
+
+            </ul>
+
+
+            <ul class="navbar-nav navbar-user ml-auto align-items-lg-center">
+
+                <li class="nav-item d-none d-lg-flex">
+                    <a href="javascript:void(0);" onclick="alert('加入收藏失败，请使用Ctrl+D进行添加')" class="btn btn-primary require-login">加入收藏</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="position-relative qdetail-wrap" style="height: auto !important;">
+    <div class="container my-4" style="height: auto !important;">
+        <div class="row" style="height: auto !important;">
+            <div class="col-12 col-xl w-0" itemprop="mainEntity" itemscope="" itemtype="https://schema.org/Question">
+
+
+                <div class="card border-0 mb-4">
+                    <div class="card-body p-lg-30">
+
+
+                        <h1 class="h2 mb-3" itemprop="name">
+                            <a class="text-body" href="javascript:void(0);" id="e_title">用S-函数从Simulink方案导出C++代码</a>
+                        </h1>
+                        <div class="d-flex flex-wrap align-items-center mb-4">
+                            <div class="m-n1">
+                                    <a class="m-1 badge-tag" href="javascript:void(0);">
+                                        c++
+                                    </a>
+                                    <a class="m-1 badge-tag" href="javascript:void(0);">
+                                        matlab
+                                    </a>
+                                    <a class="m-1 badge-tag" href="javascript:void(0);">
+                                        cmake
+                                    </a>
+                                    <a class="m-1 badge-tag" href="javascript:void(0);">
+                                        simulink
+                                    </a>
+                            </div>
+                            <div class="font-size-14">
+                            </div>
+                        </div>
+                        <article id="e_question" class="article fmt article-content" data-license="" itemprop="text">
+                            <p>我有一个Simulink工作的Simulink模式，其中有一些s-function，我想在C++中输出这个代码并编译它。我已经尝试过导出和编译一个简单的模式，它是有效的，但是当我尝试编译我项目的导出代码时，我得到了很多错误，比如</p> 
+<pre><code class="hljs lua"><span class="hljs-built_in">error</span>: #<span class="hljs-built_in">error</span> Unrecognized use   
+<span class="hljs-built_in">error</span>: #<span class="hljs-built_in">error</span> Must define one of RT,nNRT, MATLAB_MEX_FILE, SL_INTERNAL, <span class="hljs-keyword">or</span> FIPXT_SHARED_MODULE     
+<span class="hljs-built_in">error</span>: #<span class="hljs-built_in">error</span> Unhandled case  
+<span class="hljs-built_in">error</span>: ‘mxArray’ does <span class="hljs-keyword">not</span> name a <span class="hljs-built_in">type</span>  mxArray       **dlgParams; /* The S-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parameters</span>   
+<span class="hljs-title">error</span>: ‘<span class="hljs-title">mxArray</span>’ <span class="hljs-title">has</span> <span class="hljs-title">not</span> <span class="hljs-title">been</span> <span class="hljs-title">declared</span>  <span class="hljs-title">mxArray</span> **)</span> 
+<span class="hljs-built_in">error</span>: ‘mxArray’ does  <span class="hljs-keyword">not</span> name a <span class="hljs-built_in">type</span> mxArray     *propVal;  
+<span class="hljs-built_in">error</span>: ‘RTWSfcnInfo’ does <span class="hljs-keyword">not</span> name a <span class="hljs-built_in">type</span>; did you mean ‘RTWLogInfo’? RTWSfcnInfo sfcnInfo
+</code></pre> 
+<p>我使用的主要设置有：</p> 
+<pre><code class="hljs sql">Code generation system target file <span class="hljs-comment">--&gt; grt.tlc</span>
+language <span class="hljs-comment">--&gt; C++</span>
+Pack code and artifact <span class="hljs-comment">--&gt; &lt;name_zip&gt;</span>
+Tool chain GNU gcc/g++ | gmake (64-bit Linux)
+default parameter behavior <span class="hljs-comment">--&gt; tuanble</span>
+code interface packaging <span class="hljs-comment">--&gt; nonreusable function</span>
+external mode <span class="hljs-comment">--&gt; chcked</span>
+standar math library <span class="hljs-comment">--&gt; c++ 03(ISO)</span>
+single output/<span class="hljs-keyword">update</span> <span class="hljs-keyword">function</span> <span class="hljs-comment">--&gt; checked</span>
+i used a <span class="hljs-keyword">fixed</span> step <span class="hljs-keyword">size</span> solver
+</code></pre> 
+<p>我在用Ubuntu18。</p> 
+<p>源代码生成成功问题是当我试图编译代码时。代码生成后，我会得到一个包含所有源代码的zip文件夹，以及一些外部头文件，我在制作
+CMakeLists时会包含这些头文件。txt。我还尝试直接用。mk文件，但我也得到了错误反弹。这个问题与s-function有关，因为我用一个
+源代码s-function构建了一个简单的simulink模式，它实现了一个动态模型和一个输出，当我生成代码并编译它时，我会得到相同的错误。我还
+试图制作一个没有s-function的简单模式，这很有效。那么s-function是否有可导出的设置</p>
+                        </article>
+
+                        <div class="text-secondary font-size-14 d-flex justify-content-between align-items-center flex-column flex-md-row">
+                            <div class="sflex-center flex-column flex-md-row">
+
+                                <div><span class="split-dot"></span>
+                                    <time itemprop="dateCreated" datetime="2022-02-06T06:56:54+00:00">
+                                        发布于 5 月前
+                                    </time>
+                                </div>
+                            </div>
+                            <div class="operation text-center"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="ad_content_center">
+                    <div class="_whpzgdbnjxm"><iframe id="iframeu6358890_0" name="iframeu6358890_0" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/ucnm.html" scrolling="no" width="760" height="90" frameborder="0"></iframe></div>
+                    <script type="text/javascript">
+                        (window.slotbydup = window.slotbydup || []).push({
+                            id: "u6358890",
+                            container: "_whpzgdbnjxm",
+                            async: true
+                        });
+                    </script>
+
+                </div>
+
+                <div id="comment-area" class="my-4 answer-area">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div id="comment-total" class="h5 mb-0">回答
+                        </div>
+
+                    </div>
+
+
+                    <div class="card mb-2 border-0">
+                        <div class="media card-body p-lg-30" id="answer-1020000037544503" itemscope="" itemtype="https://schema.org/Answer" itemprop="suggestedAnswer">
+                            <div class="media-body w-0">
+                                <div class="commentUnit">
+                                    <div class="mb-4 information d-flex align-items-center">
+                                        <a class="d-uname sflex-center mr-1" href="#question-recommend" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+                                            <img class="d-inline-block rounded-circle mr-2 " style=" background-color: #fdc93a; " src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/user-64.png" alt="avatar" itemprop="image" width="32">
+                                        </a>
+
+
+                                    </div>
+                                    <article id="e_answer" class="article fmt my-3 parsedText" itemprop="text">
+
+                                        <p>最后，我找到了一个答案，我在这里发布，以防其他人也有我同样的问题。</p> 
+<p>我的解决方案是：</p> 
+<p>首先，一旦生成了包含所有源代码和头文件的zip文件，打开它并将文件buldinfo.mat加载到Matlab工作区，然后在Matlab shell中运行</p> 
+<pre><code class="hljs less"><span class="hljs-selector-tag">packNGo</span>(buildInfo)
+</code></pre> 
+<p>通过这种方式，您可以生成一个新的。压缩所有的来源和标题，这是。zip与之前的不同之处在于它是扁平的，没有嵌套的文件夹。</p> 
+<p>在这个文件夹中有一个名为define.txt的文件，其中有一个变量列表，所有这些变量都应该作为标志传递给编译器。例如，在我的例子中，我使用一个CMakelists.txt来设置我使用的这些标志</p> 
+<pre><code class="hljs bash"><span class="hljs-built_in">set</span>(CMAKE_CXX_FLAGS <span class="hljs-string">"-Wall -Wextra -DMODEL=test_sum_gain -DNUMST=2 -DNCSTATES=2 -DRT -DUSE_RTMODEL -DON_TARGET_WAIT_FOR_START=0 -DCLASSIC_INTERFACE=0 -DALLOCATIONFCN=0 -DTID01EQ=1 -DEXT_MODE=1 -DMAT_FILE=0 -DONESTEPFCN=1 -DTERMFCN=1 -DMULTI_INSTANCE_CODE=0 -DINTEGER_CODE=0 -DMT=0"</span>)
+</code></pre> 
+<p>这取决于编译源代码的方式，但在任何情况下，都应该设置这些变量，我没有错，它们只是预编译器的一个指令。</p> 
+<p>这两件事对我很管用。</p>
+                                    </article>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="question-recommend"><div class="my-4 answer-area">
+    <div class="card mb-2 border-0">
+        <div class="media card-body p-lg-30" style="line-height: normal;">
+
+            <article class="article fmt parsedText" itemprop="text">
+
+                <h3 class="">本站已为你智能检索到如下内容，以供参考：</h3><h4 class="" style="margin-bottom: 5px; "> ✿ 相关问答<span style="color: coral;font-size: 25px;"> 5 </span>个</h4>                <p style="overflow: hidden;margin-bottom: 5px;text-overflow: ellipsis;white-space: nowrap;width: 750px;">
+                    <a href="https://www.5axxw.com/questions/content/6b62ql" title="饱和函数在Simulink/Matlab中的实现" target="_blank">饱和函数在Simulink/Matlab中的实现</a>
+                </p>                <p style="overflow: hidden;margin-bottom: 5px;text-overflow: ellipsis;white-space: nowrap;width: 750px;">
+                    <a href="https://www.5axxw.com/questions/content/wanrtm" title="C++库只导出特定函数" target="_blank">C++库只导出特定函数</a>
+                </p>                <p style="overflow: hidden;margin-bottom: 5px;text-overflow: ellipsis;white-space: nowrap;width: 750px;">
+                    <a href="https://www.5axxw.com/questions/content/ibefra" title="用于导出的git归档的替代方案" target="_blank">用于导出的git归档的替代方案</a>
+                </p>                <p style="overflow: hidden;margin-bottom: 5px;text-overflow: ellipsis;white-space: nowrap;width: 750px;">
+                    <a href="https://www.5axxw.com/questions/content/tr9f10" title="Simulink调用块" target="_blank">Simulink调用块</a>
+                </p>                <p style="overflow: hidden;margin-bottom: 5px;text-overflow: ellipsis;white-space: nowrap;width: 750px;">
+                    <a href="https://www.5axxw.com/questions/content/8vl34z" title="C++：具有相同要求的该范围视图构造的替代方案？" target="_blank">C++：具有相同要求的该范围视图构造的替代方案？</a>
+                </p><h4 class="" style="margin-bottom: 5px; "> ✿ 推荐阅读<span style="color: coral;font-size: 25px;"> 5 </span>个</h4>                <p style="overflow: hidden;margin-bottom: 5px;text-overflow: ellipsis;white-space: nowrap;width: 750px;">
+                    <a href="https://www.5axxw.com/wiki/content/p7thas" title="C++ Matlab开发工具。" target="_blank">C++ Matlab开发工具。</a>
+                </p>                <p style="overflow: hidden;margin-bottom: 5px;text-overflow: ellipsis;white-space: nowrap;width: 750px;">
+                    <a href="https://www.5axxw.com/wiki/content/zx6gd4" title="C++的函数编程库。编写简洁易读的C++代码。" target="_blank">C++的函数编程库。编写简洁易读的C++代码。</a>
+                </p>                <p style="overflow: hidden;margin-bottom: 5px;text-overflow: ellipsis;white-space: nowrap;width: 750px;">
+                    <a href="https://www.5axxw.com/wiki/content/uhm3lu" title="C++、MATLAB和Python中的图像定量分析" target="_blank">C++、MATLAB和Python中的图像定量分析</a>
+                </p>                <p style="overflow: hidden;margin-bottom: 5px;text-overflow: ellipsis;white-space: nowrap;width: 750px;">
+                    <a href="https://www.5axxw.com/wiki/content/5sisl2" title="C++的机器代码生成" target="_blank">C++的机器代码生成</a>
+                </p>                <p style="overflow: hidden;margin-bottom: 5px;text-overflow: ellipsis;white-space: nowrap;width: 750px;">
+                    <a href="https://www.5axxw.com/wiki/content/k3ltyq" title="C/C++代码的静态分析" target="_blank">C/C++代码的静态分析</a>
+                </p>
+                <hr>
+                <p>本文支持英文版本，如需查看请<span style="color: coral;cursor:pointer;" onclick="lang_to_en()"> 点击这里 </span>！</p>
+                <p>(查看英文版本获取更加准确信息)</p>
+            </article>
+
+        </div>
+    </div>
+
+</div></div>
+
+            </div>
+
+            <div class="col-12 col-xl-auto" style="height: auto !important;">
+                <div class="w-xl-300" style="height: auto !important;">
+
+                    <div class="card border-0 overflow-hidden d-none justify-content-center align-items-center float-ads mb-4 d-xl-flex" style="top: auto; margin-top: auto; width: 300px;">
+                        <ins class="adsbygoogle" style="display: block; width: 300px; height: 600px;" data-ad-client="ca-pub-5929899578203496" data-ad-slot="9020541524" data-ad-format="auto" data-full-width-responsive="true" data-adsbygoogle-status="done" data-ad-status="filled"><ins id="aswift_0_expand" style="border: medium none; height: 600px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-table;" tabindex="0" title="Advertisement" aria-label="Advertisement"><ins id="aswift_0_anchor" style="border: medium none; height: 600px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: block; overflow: visible;"><iframe id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0;width:300px;height:600px;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/ads.html" data-google-container-id="a!1" data-google-query-id="CL2r15P7lfkCFZjETAIdU5AFyw" data-load-complete="true" width="300" height="600" frameborder="0"></iframe></ins></ins></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                        <div id="OA_holder_1"></div>
+                    </div>
+                    <!-- / 矩形广告位 -->
+
+
+                    <!-- / 格子广告、链接广告 -->
+                    <div style="top: auto; margin-top: auto; width: 300px;" class="">
+                        <h6 class="mt-4 position-relative font-size-20">热门问答</h6>
+                        <div class="card border-0 overflow-hidden">
+                            <div class="list-group list-group-flush" id="article-headline">
+
+                                    <a class="list-group-item list-group-item-action" href="https://www.5axxw.com/questions/content/9pgv5v" target="_self">
+                                        <div class="media">
+                                            <span class="badge text-white mr-3 mt-1 badge-1">1</span>
+                                            <div class="media-body">
+                                                <h6 class="mb-1 text-body line_word">为什么我不能在这段代码中使用findall（）方法，解决方案是什么</h6>
+                                                <span class="text-secondary font-size-14"><span class="split-dot"></span> 发布于 1 天前</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="list-group-item list-group-item-action" href="https://www.5axxw.com/questions/content/xyrlww" target="_self">
+                                        <div class="media">
+                                            <span class="badge text-white mr-3 mt-1 badge-2">2</span>
+                                            <div class="media-body">
+                                                <h6 class="mb-1 text-body line_word">XPath选择多个子值</h6>
+                                                <span class="text-secondary font-size-14"><span class="split-dot"></span> 发布于 6 天前</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="list-group-item list-group-item-action" href="https://www.5axxw.com/questions/content/4x2hiw" target="_self">
+                                        <div class="media">
+                                            <span class="badge text-white mr-3 mt-1 badge-3">3</span>
+                                            <div class="media-body">
+                                                <h6 class="mb-1 text-body line_word">如何使用PostgreSQL在边界值之间选择有序子集</h6>
+                                                <span class="text-secondary font-size-14"><span class="split-dot"></span> 发布于 6 天前</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="list-group-item list-group-item-action" href="https://www.5axxw.com/questions/content/3ckip3" target="_self">
+                                        <div class="media">
+                                            <span class="badge text-white mr-3 mt-1 badge-4">4</span>
+                                            <div class="media-body">
+                                                <h6 class="mb-1 text-body line_word">外部c模板实例化</h6>
+                                                <span class="text-secondary font-size-14"><span class="split-dot"></span> 发布于 5 天前</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="list-group-item list-group-item-action" href="https://www.5axxw.com/questions/content/9kvlxe" target="_self">
+                                        <div class="media">
+                                            <span class="badge text-white mr-3 mt-1 badge-5">5</span>
+                                            <div class="media-body">
+                                                <h6 class="mb-1 text-body line_word">如何删除github存储库中的*所有*文件，并删除上游信息？</h6>
+                                                <span class="text-secondary font-size-14"><span class="split-dot"></span> 发布于 4 天前</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="list-group-item list-group-item-action" href="https://www.5axxw.com/questions/content/fu0b98" target="_self">
+                                        <div class="media">
+                                            <span class="badge text-white mr-3 mt-1 badge-6">6</span>
+                                            <div class="media-body">
+                                                <h6 class="mb-1 text-body line_word">如何使用Java 8和streams[重复]操作循环</h6>
+                                                <span class="text-secondary font-size-14"><span class="split-dot"></span> 发布于 4 天前</span>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                <a class="list-group-item list-group-item-action text-center text-primary" href="https://www.5axxw.com/questions/index">更多问答</a>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="left-fit-ad" style=" margin-top: 10px; width: 300px;  border-radius: 8px; ">
+                            <ins class="adsbygoogle" style="display: block; height: 600px;" data-ad-client="ca-pub-5929899578203496" data-ad-slot="2063386905" data-ad-format="auto" data-full-width-responsive="true" data-adsbygoogle-status="done" data-ad-status="filled"><ins id="aswift_1_expand" style="border: medium none; height: 600px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-table;" tabindex="0" title="Advertisement" aria-label="Advertisement"><ins id="aswift_1_anchor" style="border: medium none; height: 600px; width: 300px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: block; overflow: visible;"><iframe id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;border:0;width:300px;height:600px;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/ads.html" data-google-container-id="a!2" data-google-query-id="CIiX2JP7lfkCFcZtYAod8koG2A" data-load-complete="true" width="300" height="600" frameborder="0"></iframe></ins></ins></ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+
+                </div>
+            </div>
+            <div class="bottom-ad" style="width: 1180px;">
+                <ins class="adsbygoogle" style="display: block; height: 280px;" data-ad-client="ca-pub-5929899578203496" data-ad-slot="6166283449" data-ad-format="auto" data-full-width-responsive="true" data-adsbygoogle-status="done" data-ad-status="filled"><ins id="aswift_2_expand" style="border: medium none; height: 280px; width: 1180px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-table;" tabindex="0" title="Advertisement" aria-label="Advertisement"><ins id="aswift_2_anchor" style="border: medium none; height: 280px; width: 1180px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: block; overflow: visible;"><iframe id="aswift_2" name="aswift_2" style="left:0;position:absolute;top:0;border:0;width:1180px;height:280px;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/ads.html" data-google-container-id="a!3" data-google-query-id="CICn2JP7lfkCFRVCYAodnncLNA" data-load-complete="true" width="1180" height="280" frameborder="0"></iframe></ins></ins></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer id="footer" class="bg-white py-5 font-size-14">
+    <div class="container">
+
+        <hr class="mt-2 mb-4">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="text-secondary">
+                    <p class="mb-1">Copyright © 2011-2020 我爱学习网.</p>
+                    <p class="mb-1">
+                        <a class="text-secondary mr-2" href="javascript:void(0);" rel="nofollow">
+                            法律声明 违版必究 资料版权 作者所有</a>
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-4 text-right">
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<link rel="stylesheet" href="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/atom-one-dark.min.css">
+<script src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script async="" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/f_006.txt"></script>
+<script>
+    let c_id="7rd504";
+    let auth_key="0a66b080ee96ef8";
+
+    $(function () {
+        try {
+            $('article img').each(function (i, element) {
+                element.style["max-width"] = element.parentNode.offsetWidth + 'px';
+            })
+        } catch (e) {
+        }
+    })
+</script>
+<script src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/question.js"></script>
+
+<ins class="adsbygoogle adsbygoogle-noablate" style="display: none !important;" data-adsbygoogle-status="done" data-ad-status="unfilled"><ins id="aswift_3_expand" style="border: medium none; height: 0px; width: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-table;" tabindex="0" title="Advertisement" aria-label="Advertisement"><ins id="aswift_3_anchor" style="border: medium none; height: 0px; width: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: block;"><iframe id="aswift_3" name="aswift_3" style="left:0;position:absolute;top:0;border:0;width:undefinedpx;height:undefinedpx;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/ads_004.html" data-google-container-id="a!4" data-load-complete="true" frameborder="0"></iframe></ins></ins></ins><ins class="adsbygoogle adsbygoogle-noablate" data-adsbygoogle-status="done" style="display: block; width: 100% !important; height: 129px !important; bottom: 0px; clear: none !important; float: none !important; left: 0px; margin: 0px !important; max-height: none !important; max-width: none !important; opacity: 1; overflow: visible !important; padding: 0px !important; position: fixed; right: auto !important; top: auto !important; vertical-align: baseline !important; visibility: visible !important; z-index: 2147483647; background: rgb(250, 250, 250) none repeat scroll 0% 0% !important;" data-anchor-status="displayed" data-ad-status="filled" data-anchor-shown="true"><div class="grippy-host"></div><ins id="aswift_4_expand" style="border: medium none !important; height: 124px !important; width: 100% !important; margin: 0px !important; padding: 0px !important; position: relative !important; visibility: visible !important; background-color: transparent !important; display: inline-table !important; inset: auto !important; clear: none !important; float: none !important; max-height: none !important; max-width: none !important; opacity: 1 !important; overflow: visible !important; vertical-align: baseline !important; z-index: auto !important;" tabindex="0" title="Advertisement" aria-label="Advertisement"><ins id="aswift_4_anchor" style="border: medium none !important; height: 124px !important; width: 100% !important; margin: 0px !important; padding: 0px !important; position: relative !important; visibility: visible !important; background-color: transparent !important; display: block !important; inset: auto !important; clear: none !important; float: none !important; max-height: none !important; max-width: none !important; opacity: 1 !important; overflow: visible !important; vertical-align: baseline !important; z-index: auto !important;"><iframe id="aswift_4" name="aswift_4" style="width: 1005px !important; height: 124px !important; display: block; margin: 0px auto;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/zrt_lookup.html" data-google-container-id="a!5" data-google-query-id="CI3n2JP7lfkCFRVCYAodnncLNA" data-load-complete="true" width="1005" height="124" frameborder="0"></iframe></ins></ins></ins><iframe src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/aframe.html" style="display: none;" width="0" height="0"></iframe></body><iframe id="google_esf" name="google_esf" src="%E7%94%A8S-%E5%87%BD%E6%95%B0%E4%BB%8ESimulink%E6%96%B9%E6%A1%88%E5%AF%BC%E5%87%BAC++%E4%BB%A3%E7%A0%81%20-%20%E6%88%91%E7%88%B1%E5%AD%A6%E4%B9%A0%E7%BD%91_files/zrt_lookup_002.html" style="display: none;"></iframe></html>
